@@ -6,15 +6,19 @@ import (
 )
 
 func Home(w http.ResponseWriter, r *http.Request) {
+	if r.URL.Path != "/" {
+		http.NotFound(w, r)
+		return
+	}
 	w.Write([]byte("Hello from SnippetBox."))
 }
 
 func SnippetView(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Hello from SnippetBox."))
+	w.Write([]byte("Hello from SnippetView."))
 }
 
 func SnippetCreate(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Hello from SnippetBox."))
+	w.Write([]byte("Hello from SnippetCreate."))
 }
 
 func main() {
