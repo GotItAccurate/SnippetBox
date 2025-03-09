@@ -34,25 +34,11 @@ func main() {
 		errorLog: errorLog,
 	}
 
-	// Create a new router/mux :
-	mux := http.NewServeMux()
-
-	// Create a file server for the static files :
-	fileServer := http.FileServer(http.Dir("./ui/static"))
-
-	// Route handler for the static files :
-	mux.Handle("/static/", http.StripPrefix("/static", fileServer))
-
-	// Route handlers for the rest of the routes :
-	mux.HandleFunc("/", app.Home)
-	mux.HandleFunc("/snippet/view", app.SnippetView)
-	mux.HandleFunc("/snippet/create", app.SnippetCreate)
-
 	// Define parameters for the HTTP server :
 	srv := &http.Server{
 		Addr:     *addr,
 		ErrorLog: errorLog,
-		Handler:  mux,
+		Handler:  app.routes(),
 	}
 
 	// Starting the server :
