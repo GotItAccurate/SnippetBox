@@ -1,10 +1,13 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"html/template"
 	"net/http"
 	"strconv"
+
+	"github.com/GotItAccurate/SnippetBox/internal/models"
 )
 
 // Handler for GET : '/' :
@@ -45,8 +48,18 @@ func (app *application) SnippetView(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	snippet, err := app.snippets.Get(id)
+	if err != nil {
+		if errors.Is(err, models.ErrNoRecord) {
+			app.notFound(w)
+		} else {
+			app.serverError(w, err)
+		}
+		return
+	}
+
 	// Output for the specified ID :
-	fmt.Fprintf(w, "Display a specific snippet ID %d.", id)
+	fmt.Fprintf(w, "%+v", snippet)
 }
 
 // Handler for POST : '/snippet/create'
